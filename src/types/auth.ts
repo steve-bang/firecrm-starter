@@ -1,0 +1,9 @@
+export type AuthProvider = "credentials" | "google";
+
+export type AuthenticatedUser = {
+  id: string;
+  email: string;
+  name: string;
+  image?: string | null;
+  provider: AuthProvider;
+};
