@@ -12,7 +12,7 @@ const variantClasses = {
   primary:
     "bg-[var(--color-brand)] text-white shadow-sm hover:brightness-110 focus-visible:outline-[var(--color-brand)]",
   secondary:
-    "bg-white text-slate-900 ring-1 ring-slate-200 hover:bg-slate-50 focus-visible:outline-slate-300",
+    "surface-card-muted text-slate-900 shadow-none hover:bg-white focus-visible:outline-slate-300 dark:text-white",
   ghost:
     "bg-transparent text-slate-700 hover:bg-slate-100 focus-visible:outline-slate-300 dark:text-slate-200 dark:hover:bg-slate-800",
   danger:
@@ -36,7 +36,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60",
         variantClasses[variant],
         sizeClasses[size],
         className,

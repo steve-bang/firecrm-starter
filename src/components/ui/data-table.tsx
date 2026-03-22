@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 type DataTableColumn<T> = {
   key: string;
@@ -15,6 +16,7 @@ type DataTableProps<T extends { id: string }> = {
   description?: string;
   columns: Array<DataTableColumn<T>>;
   rows: T[];
+  toolbar?: ReactNode;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
@@ -24,6 +26,7 @@ type DataTableProps<T extends { id: string }> = {
   onNextPage: () => void;
   canGoPrevious: boolean;
   canGoNext: boolean;
+  footerLabel?: ReactNode;
   emptyState: ReactNode;
 };
 
@@ -32,6 +35,7 @@ export function DataTable<T extends { id: string }>({
   description,
   columns,
   rows,
+  toolbar,
   searchValue,
   onSearchChange,
   searchPlaceholder,
@@ -41,18 +45,19 @@ export function DataTable<T extends { id: string }>({
   onNextPage,
   canGoPrevious,
   canGoNext,
+  footerLabel,
   emptyState,
 }: DataTableProps<T>) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/60 bg-white/85 shadow-[0_12px_40px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-slate-950/80">
-      <div className="flex flex-col gap-4 border-b border-slate-200/80 px-6 py-5 dark:border-slate-800">
+    <div className="surface-card overflow-hidden">
+      <div className="flex flex-col gap-3 border-b border-[var(--border-color)] px-5 py-4">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <h2 className="text-lg font-semibold text-slate-950 dark:text-white">
               {title}
             </h2>
             {description ? (
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-sm text-muted">
                 {description}
               </p>
             ) : null}
@@ -67,30 +72,40 @@ export function DataTable<T extends { id: string }>({
             </div>
           ) : null}
         </div>
+        {toolbar ? <div className="flex flex-wrap items-center gap-3">{toolbar}</div> : null}
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800">
-          <thead className="bg-slate-50/80 dark:bg-slate-900/70">
+        <table className="min-w-full divide-y divide-[var(--border-color)]">
+          <thead className="bg-[var(--card-background-muted)]/80">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400"
+                  className={cn(
+                    "px-5 py-3 text-left text-xs font-semibold uppercase tracking-[0.18em] text-subtle",
+                    column.className,
+                  )}
                 >
                   {column.header}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200/80 dark:divide-slate-800">
+          <tbody className="divide-y divide-[var(--border-color)]">
             {rows.length ? (
               rows.map((row) => (
-                <tr key={row.id} className="align-top">
+                <tr
+                  key={row.id}
+                  className="align-top transition-colors hover:bg-white/55 dark:hover:bg-slate-950/55"
+                >
                   {columns.map((column) => (
                     <td
                       key={column.key}
-                      className={`px-6 py-4 text-sm text-slate-700 dark:text-slate-200 ${column.className ?? ""}`}
+                      className={cn(
+                        "px-5 py-3.5 text-sm text-slate-700 dark:text-slate-200",
+                        column.className,
+                      )}
                     >
                       {column.render(row)}
                     </td>
@@ -99,7 +114,7 @@ export function DataTable<T extends { id: string }>({
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-10">
+                <td colSpan={columns.length} className="px-5 py-8">
                   {emptyState}
                 </td>
               </tr>
@@ -108,9 +123,9 @@ export function DataTable<T extends { id: string }>({
         </table>
       </div>
 
-      <div className="flex items-center justify-between border-t border-slate-200/80 px-6 py-4 text-sm dark:border-slate-800">
-        <span className="text-slate-500 dark:text-slate-400">
-          Page {page} of {pageCount}
+      <div className="flex flex-col gap-2.5 border-t border-[var(--border-color)] px-5 py-3.5 text-sm md:flex-row md:items-center md:justify-between">
+        <span className="text-muted">
+          {footerLabel ?? `Page ${page} of ${pageCount}`}
         </span>
         <div className="flex gap-2">
           <Button variant="secondary" onClick={onPreviousPage} disabled={!canGoPrevious}>

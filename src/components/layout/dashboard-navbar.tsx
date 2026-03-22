@@ -33,12 +33,12 @@ export function DashboardNavbar({ user }: { user: UserProfile }) {
   }
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-white/40 bg-white/80 px-5 py-4 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/80">
+    <header className="shell-navbar sticky top-0 z-20 flex items-center justify-between px-5 py-4">
       <div>
         <p className="text-sm font-medium text-slate-950 dark:text-white">
           Welcome back, {user.name}
         </p>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-muted">
           Here&apos;s the latest state of your CRM workspace.
         </p>
       </div>
@@ -49,14 +49,14 @@ export function DashboardNavbar({ user }: { user: UserProfile }) {
           <button
             type="button"
             onClick={() => setMenuOpen((current) => !current)}
-            className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-950 dark:hover:border-slate-700 dark:hover:bg-slate-900"
+            className="surface-card-muted flex items-center gap-3 px-3 py-2 shadow-none transition hover:bg-white"
             aria-label="Open user menu"
             aria-expanded={menuOpen}
           >
             <Avatar name={user.name} image={user.image} size="sm" />
             <div className="hidden text-left md:block">
               <p className="text-sm font-medium text-slate-900 dark:text-white">{user.name}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
+              <p className="text-xs text-subtle">{user.email}</p>
             </div>
             <svg
               viewBox="0 0 24 24"
@@ -75,14 +75,14 @@ export function DashboardNavbar({ user }: { user: UserProfile }) {
           </button>
 
           {menuOpen ? (
-            <div className="absolute right-0 top-16 z-30 w-72 overflow-hidden rounded-3xl border border-slate-200 bg-white p-2 shadow-[0_20px_60px_rgba(15,23,42,0.16)] dark:border-slate-800 dark:bg-slate-950">
-              <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-3 py-3 dark:bg-slate-900">
+            <div className="surface-floating absolute right-0 top-16 z-30 w-72 overflow-hidden p-2">
+              <div className="surface-card-muted flex items-center gap-3 rounded-[18px] px-3 py-3">
                 <Avatar name={user.name} image={user.image} size="md" />
                 <div className="min-w-0">
                   <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
                     {user.name}
                   </p>
-                  <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                  <p className="truncate text-xs text-subtle">
                     {user.email}
                   </p>
                 </div>
@@ -92,7 +92,7 @@ export function DashboardNavbar({ user }: { user: UserProfile }) {
                 <Link
                   href="/dashboard/profile"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white"
+                  className="flex items-center gap-3 rounded-[18px] px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -119,7 +119,7 @@ export function DashboardNavbar({ user }: { user: UserProfile }) {
                   type="button"
                   onClick={handleSignOut}
                   disabled={isSigningOut}
-                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50 disabled:opacity-60 dark:hover:bg-rose-500/10"
+                  className="flex w-full items-center gap-3 rounded-[18px] px-3 py-2.5 text-left text-sm font-medium text-rose-600 transition hover:bg-rose-50 disabled:opacity-60 dark:hover:bg-rose-500/10"
                 >
                   <svg
                     viewBox="0 0 24 24"

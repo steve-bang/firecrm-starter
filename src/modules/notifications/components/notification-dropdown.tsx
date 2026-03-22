@@ -17,7 +17,7 @@ export function NotificationDropdown() {
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-slate-700 dark:hover:bg-slate-900 dark:hover:text-white"
+        className="surface-card-muted relative flex h-11 w-11 items-center justify-center rounded-[var(--radius-control)] text-slate-600 shadow-none transition hover:bg-white hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
         aria-label="Open notifications"
         aria-expanded={open}
       >
@@ -44,7 +44,7 @@ export function NotificationDropdown() {
       </button>
 
       {open ? (
-        <div className="absolute right-0 top-14 z-30 w-96 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-800 dark:bg-slate-950">
+        <div className="surface-floating absolute right-0 top-14 z-30 w-96 p-4">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="font-semibold text-slate-950 dark:text-white">
               Recent notifications
@@ -57,7 +57,7 @@ export function NotificationDropdown() {
             {notifications.map((notification) => (
               <div
                 key={notification.id}
-                className="rounded-2xl border border-slate-200/80 p-3 dark:border-slate-800"
+                className="surface-card-muted rounded-[18px] p-3"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>

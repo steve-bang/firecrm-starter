@@ -153,7 +153,7 @@ export function DashboardSidebar() {
   return (
     <aside
       className={cn(
-        "hidden shrink-0 flex-col border-r border-slate-200 bg-slate-100 px-3 py-4 text-slate-900 xl:flex transition-[width] duration-300",
+        "shell-sidebar hidden shrink-0 flex-col px-3 py-4 text-slate-900 xl:flex transition-[width] duration-300",
         collapsed ? "w-24 items-center px-3" : "w-[290px]",
       )}
     >
@@ -164,13 +164,13 @@ export function DashboardSidebar() {
           collapsed ? "justify-center px-0" : "gap-3 px-2",
         )}
       >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-brand)] text-sm font-semibold text-white">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] bg-[var(--color-brand)] text-sm font-semibold text-white shadow-sm">
           FC
         </div>
         {!collapsed ? (
           <div className="min-w-0">
             <p className="text-sm font-semibold tracking-tight text-slate-950">FireCRM</p>
-            <p className="text-xs text-slate-500">Starter</p>
+            <p className="text-xs text-subtle">Starter</p>
           </div>
         ) : null}
       </Link>
@@ -186,16 +186,16 @@ export function DashboardSidebar() {
               href={item.href}
               title={collapsed ? item.label : undefined}
               className={cn(
-                "group flex items-center rounded-2xl transition-colors",
+                "group flex items-center rounded-[var(--radius-control)] transition-colors",
                 active
-                  ? "bg-white text-slate-950"
-                  : "text-slate-600 hover:bg-white/80 hover:text-slate-950",
+                  ? "surface-card-muted text-slate-950"
+                  : "text-slate-600 hover:bg-white/70 hover:text-slate-950",
                 collapsed ? "justify-center px-0 py-3" : "gap-3 px-3 py-2.5",
               )}
             >
               <div
                 className={cn(
-                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition",
+                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] transition",
                   active
                     ? "bg-[color:color-mix(in_srgb,var(--color-brand)_12%,white)] text-[var(--color-brand)]"
                     : "text-slate-500 group-hover:text-slate-700",
@@ -216,7 +216,10 @@ export function DashboardSidebar() {
           type="button"
           onClick={toggleCollapsed}
           title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className={cn("group flex items-center text-slate-500 transition hover:text-slate-900", collapsed ? "w-auto justify-center px-0 py-2" : "w-full gap-3 px-3 py-2")}
+          className={cn(
+            "group flex items-center text-slate-500 transition hover:text-slate-900",
+            collapsed ? "w-auto justify-center px-0 py-2" : "w-full gap-3 px-3 py-2",
+          )}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           <CollapseIcon className="h-5 w-5 shrink-0" collapsed={collapsed} />
