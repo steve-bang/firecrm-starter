@@ -16,6 +16,7 @@ Core features:
 
 - Authentication with email/password and Google
 - Protected dashboard system
+- Responsive dashboard shell with desktop collapse and tablet/mobile drawer navigation
 - User profile management
 - Staff management with mock-first data
 - Notification UI with mock-first data
@@ -30,6 +31,7 @@ Read these files before making structural changes:
 - `ARCHITECTURE.md`
 - `CONVENTIONS.md`
 - `API_SPEC.md`
+- `DESIGN.md`
 
 `AGENTS.md` is the main operating guide for AI agents in this repository.
 

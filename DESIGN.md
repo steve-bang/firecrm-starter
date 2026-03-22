@@ -368,7 +368,9 @@ The shell should visually distinguish navigation surfaces, control surfaces, and
 **Behavior**:
 - Always visible on desktop
 - Collapsible on desktop (icons + tooltips only when collapsed)
-- Hidden behind a drawer on mobile
+- Hidden behind a drawer on tablet/mobile
+- Fixed to viewport height on desktop
+- Navigation list scrolls independently from the footer collapse control
 
 **Navigation item anatomy**:
 - Icon + text label on desktop expanded
@@ -435,6 +437,13 @@ Staff Management
 Manage team members, roles, and status across your CRM workspace
                                                     [Invite Staff]
 ```
+
+Current implementation direction:
+
+- Left region: title and description
+- Right region: actions only
+- Thin divider underneath to separate header from page content
+- Mobile stacks vertically; desktop aligns into two regions
 
 ---
 
@@ -936,9 +945,10 @@ Avoid: long paragraphs, vague alerts, raw internal system text.
 | `DashboardNavbar` | All dashboard pages |
 | `DashboardShell` | All dashboard pages |
 | `PageHeader` | All dashboard pages |
-| `StatsCard` / KPI card | Dashboard Overview |
-| `SectionCard` | Dashboard Overview, Profile |
-| `DropdownMenu` | Navbar user menu, notification dropdown, row actions |
+| `Card` / KPI card pattern | Dashboard Overview, Staff, Notifications |
+| `DataTable` | Staff Management |
+| `Modal` | Staff invite flow |
+| `Dropdown-style floating surfaces` | Navbar user menu, notification dropdown |
 
 ### Reusable Layout Patterns
 
@@ -984,8 +994,8 @@ These rules apply to every page in the product.
 
 | Surface | Desktop | Tablet | Mobile |
 |---|---|---|---|
-| Sidebar | Fixed, collapsible | Visible if width allows | Drawer (hidden by default) |
-| Navbar | Full, horizontal | Full, horizontal | Compact — bell + user only |
+| Sidebar | Fixed-height, collapsible | Drawer opened from navbar | Drawer (hidden by default) |
+| Navbar | Full, horizontal | Full, horizontal with menu trigger | Compact with menu trigger, bell, and user |
 | KPI cards | 4-up in one row | 2×2 grid | Stacked vertically |
 | Tables | Full columns | Reduce/combine columns | Stacked list cards |
 | Forms | Single or two-column | Single column | Single column |
@@ -1011,34 +1021,26 @@ Reduce first:
 
 ## 12. Implementation Roadmap
 
-### Phase 1 — Foundation
+### Current UI Status
 
-- Finalize auth shell layout (sign-in, sign-up, forgot password, reset password)
-- Finalize dashboard shell (sidebar, navbar, content area, page header pattern)
-- Standardize spacing, form controls, and CTA hierarchy
-- Clean up error and success messaging across auth
-- Finalize staff table structure, status badges, and pagination
-- Finalize profile page structure and form
+- Auth shell exists with a branded split layout and neutral form column
+- Dashboard shell is implemented with:
+  - fixed-height desktop sidebar
+  - desktop collapse behavior
+  - tablet/mobile drawer navigation
+  - sticky navbar
+  - shared two-region page header
+- Dashboard Overview, Staff, Profile, and Notifications are implemented with the shared shell patterns
+- Notification page currently includes summary cards, unread/read filtering, and denser inbox rows
 
-### Phase 2 — Polish and Patterns
+### Next Recommended Work
 
 - Add password visibility toggle to auth forms
-- Add mobile drawer behavior for sidebar
 - Improve empty states across all list pages
 - Add row actions menu to staff table
-- Add search and filter behavior to staff management
-- Refine notification card unread/read distinction
-- Add avatar upload states to profile
-- Improve save UX feedback across profile page
-
-### Phase 3 — Extension
-
-- Add onboarding handoff after sign-up
-- Add quick actions to dashboard overview
-- Add charts to dashboard overview only if they improve decisions
 - Add sorting and optional bulk actions to staff management
-- Add notification filtering (All / Unread tabs)
-- Connect overview signals directly to deeper CRM modules
+- Add richer notification actions if the product moves beyond a mock inbox
+- Add charts to dashboard overview only if they improve decisions
 - Add brand customization hooks to auth surfaces
 - Add invite-based or workspace-aware auth extensions
 

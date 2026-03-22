@@ -9,10 +9,16 @@ It is designed for developers who want to clone a clean CRM foundation and move 
 - Public marketing pages: `/`, `/about`
 - Authentication: email/password, Google, forgot/reset password
 - Protected dashboard with middleware
+- Responsive dashboard shell with:
+  - fixed desktop sidebar
+  - collapsible desktop navigation
+  - tablet/mobile drawer navigation
+  - sticky navbar with notification and user menus
 - Profile management with Firebase Storage upload helper
 - Theme customization with light, dark, and primary color presets
-- Notification center with mock UI
+- Notification center with mock inbox UI, summary cards, and unread/read filters
 - Staff directory with mock data, search, pagination, and modal example
+- Shared design-token driven UI primitives and page header pattern
 - Feature-based architecture built for AI-assisted development
 
 ## Tech Stack
@@ -58,7 +64,7 @@ This is useful for exploring the dashboard shell and starter flows before connec
 
 ## Environment Variables
 
-See [.env.example](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/.env.example) for the full list.
+See [.env.example](./.env.example) for the full list.
 
 Required in most real deployments:
 
@@ -128,25 +134,31 @@ docs/                  # Setup and usage guides
 
 Detailed steps:
 
-- [docs/getting-started.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/docs/getting-started.md)
-- [docs/firebase-setup.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/docs/firebase-setup.md)
-- [docs/customization.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/docs/customization.md)
+- [docs/getting-started.md](./docs/getting-started.md)
+- [docs/firebase-setup.md](./docs/firebase-setup.md)
+- [docs/customization.md](./docs/customization.md)
 
 ## Architecture Notes
 
 - UI-only building blocks live in `src/components`
 - Domain logic lives in `src/modules`
 - Firebase and auth integrations live in `src/services`
-- Dashboard routes are protected by [middleware.ts](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/middleware.ts)
-- NextAuth configuration lives in [src/lib/auth-options.ts](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/src/lib/auth-options.ts)
+- Shared shell primitives live in:
+  - [dashboard-shell.tsx](./src/components/layout/dashboard-shell.tsx)
+  - [dashboard-sidebar.tsx](./src/components/layout/dashboard-sidebar.tsx)
+  - [dashboard-navbar.tsx](./src/components/layout/dashboard-navbar.tsx)
+  - [page-header.tsx](./src/components/layout/page-header.tsx)
+- Shared visual tokens and surface rules live in [globals.css](./src/app/globals.css)
+- Dashboard routes are protected by [middleware.ts](./middleware.ts)
+- NextAuth configuration lives in [src/lib/auth-options.ts](./src/lib/auth-options.ts)
 
 ## Documentation
 
 AI and human contributors should start with:
 
-- [AGENTS.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/AGENTS.md)
-- [CLAUDE.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/CLAUDE.md)
-- [PRODUCT_SPEC.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/PRODUCT_SPEC.md)
-- [ARCHITECTURE.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/ARCHITECTURE.md)
-- [CONVENTIONS.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/CONVENTIONS.md)
-- [API_SPEC.md](/Users/mrsteve.bang/Documents/_projects/FireCRM-Starter/API_SPEC.md)
+- [AGENTS.md](./AGENTS.md)
+- [CLAUDE.md](./CLAUDE.md)
+- [PRODUCT_SPEC.md](./PRODUCT_SPEC.md)
+- [ARCHITECTURE.md](./ARCHITECTURE.md)
+- [CONVENTIONS.md](./CONVENTIONS.md)
+- [API_SPEC.md](./API_SPEC.md)

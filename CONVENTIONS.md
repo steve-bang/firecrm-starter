@@ -76,6 +76,8 @@ Examples:
 - Feature components that need business context should live in their module
 - Large components should be broken into smaller view units before they become hard to scan
 - Props should reflect UI intent, not raw database structure where possible
+- Dashboard pages should use `PageHeader` for consistent title/description/action layout
+- Prefer `actions` for the right-side header region; keep `action` only for backward compatibility where already present
 
 ## Module Rules
 
@@ -121,6 +123,16 @@ src/modules/staff/
 - Prefer design tokens and theme variables over repeated hardcoded values
 - Keep class lists readable; extract patterns when repeated
 - Avoid inline styles unless dynamic values cannot be expressed cleanly otherwise
+- Reuse shared shell classes from `src/app/globals.css` such as `.surface-card`, `.surface-card-muted`, `.surface-floating`, `.shell-sidebar`, and `.shell-navbar`
+- Keep dashboard spacing medium-density; avoid marketing-page whitespace inside app screens
+- Page-specific actions belong in the page header, not the dashboard navbar
+
+## Layout Conventions
+
+- Desktop dashboard navigation uses a fixed-height sidebar with an internal scroll region for nav items
+- Sidebar footer controls must stay outside the scrollable nav area so they remain visible
+- Tablet and mobile dashboard navigation should use a drawer opened from the navbar
+- Sticky global chrome belongs to shared layout primitives, not individual page modules
 
 ## State Management Conventions
 

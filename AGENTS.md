@@ -101,9 +101,14 @@ src/
 
 - Tailwind utility usage should remain readable and composable
 - Shared primitives belong in `src/components/ui`
+- Shared dashboard shell primitives belong in `src/components/layout`
 - Feature-specific view components belong inside the owning module
 - Theme customization must be token-based, not ad hoc class overrides
 - Support light and dark mode without duplicating component logic
+- Reuse `PageHeader` for dashboard pages instead of ad hoc title/action layouts
+- Keep page actions in the right-side header action region, not in the navbar
+- Desktop sidebar is fixed-height and collapsible; tablet/mobile navigation uses a drawer pattern
+- If a sidebar footer action must stay visible, keep it outside the scrollable nav region
 
 ## Auth Rules
 
@@ -172,8 +177,19 @@ npm run test
 
 1. Add the route under `src/app/dashboard/...`
 2. Add or extend the owning feature module under `src/modules/...`
-3. Move data access to `src/services/...`
-4. Add shared UI primitives only if multiple modules need them
+3. Compose the page with `DashboardShell`, `PageHeader`, and shared surface primitives
+4. Move data access to `src/services/...`
+5. Add shared UI primitives only if multiple modules need them
+
+### Updating dashboard layout
+
+1. Check `src/app/globals.css` for existing shell and surface tokens before adding new values
+2. Keep `DashboardSidebar`, `DashboardNavbar`, and `DashboardShell` behavior aligned across desktop and mobile
+3. Preserve the current responsive contract:
+   - desktop sidebar visible and optionally collapsed
+   - tablet/mobile sidebar opened from navbar
+   - sidebar overlay closes on backdrop, close button, or route change
+4. Prefer extending the shared page-header pattern over page-specific header CSS
 
 ### New Firestore entity
 

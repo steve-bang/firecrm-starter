@@ -20,14 +20,13 @@ The architecture prioritizes:
 - Treat hooks as reusable orchestration, not as a dumping ground
 - Prefer stable interfaces so backends can change without rewriting UI
 
-## Proposed Folder Structure
+## Current Folder Structure
 
 ```text
 src/
   app/
-    (public)/
-      page.tsx
-      about/page.tsx
+    page.tsx
+    about/page.tsx
     auth/
       sign-in/page.tsx
       sign-up/page.tsx
@@ -41,48 +40,55 @@ src/
       notification/page.tsx
       staff/page.tsx
     api/
-      auth/
-      webhooks/
+      auth/[...nextauth]/route.ts
   components/
     ui/
     layout/
-    navigation/
-    feedback/
+    marketing/
+    providers/
   modules/
     auth/
       components/
-      hooks/
-      schemas/
-      types.ts
-    dashboard/
-    profile/
-    customization/
-    notifications/
-    staff/
+    customization/components/
+    dashboard/components/
+    notifications/components/
+    profile/components/
+    staff/components/
   services/
-    firebase/
-      client.ts
-      admin.ts
-      auth.service.ts
-      user.service.ts
-      notification.service.ts
-      staff.service.ts
-    next-auth/
-      options.ts
-  hooks/
-    use-theme-config.ts
-    use-current-user.ts
-  lib/
     auth/
-    env/
-    utils/
-    constants/
-  types/
+      credentials.service.ts
+    dashboard/
+      dashboard.service.ts
+    firebase/
+      admin.ts
+      auth-client.service.ts
+      client.ts
+      storage.service.ts
+      user-admin.service.ts
+      user-client.service.ts
+    notifications/
+      notification.service.ts
+    staff/
+      staff.service.ts
+  hooks/
+    use-file-upload.ts
+    use-pagination.ts
+    use-theme-config.ts
+  lib/
+    auth-options.ts
     auth.ts
-    user.ts
-    staff.ts
+    env.client.ts
+    env.server.ts
+    utils.ts
+  types/
+    dashboard.ts
+    next-auth.d.ts
     notification.ts
+    staff.ts
+    theme.ts
+    user.ts
   config/
+    app.ts
     navigation.ts
     theme.ts
 ```
@@ -100,6 +106,11 @@ src/
 - Shared UI primitives and layout elements
 - Stateless or minimally stateful presentation logic
 - No direct Firebase access
+- Dashboard shell primitives are centralized in:
+  - `src/components/layout/dashboard-shell.tsx`
+  - `src/components/layout/dashboard-sidebar.tsx`
+  - `src/components/layout/dashboard-navbar.tsx`
+  - `src/components/layout/page-header.tsx`
 
 ### `modules`
 
@@ -136,10 +147,11 @@ src/
 1. App route receives the request
 2. Route verifies session or delegates to shared auth guard
 3. Route composes the relevant feature module
-4. Module calls services or server actions
-5. Service communicates with Firebase
-6. Normalized data returns to the module
-7. Module passes view-ready props into components
+4. Shared shell/layout primitives provide navigation, header, and surface structure
+5. Module calls services or server actions
+6. Service communicates with Firebase or mock service adapters
+7. Normalized data returns to the module
+8. Module passes view-ready props into components
 
 ### Client interaction flow
 
@@ -161,6 +173,25 @@ src/
 - Theme mode and color preferences should be represented as tokens
 - The UI consumes theme tokens instead of hardcoded brand values
 - Preferences can start as local or per-user settings and later move to per-workspace settings
+- Shared shell and surface tokens currently live in `src/app/globals.css`
+- Dashboard pages should consume those shared tokens through common components instead of page-local styling
+
+## Dashboard Shell Architecture
+
+- `DashboardShell` is the composition boundary for all authenticated dashboard pages
+- `DashboardSidebar` owns:
+  - desktop fixed-height navigation
+  - desktop collapse behavior
+  - tablet/mobile drawer behavior
+  - pinned footer collapse control
+- `DashboardNavbar` owns:
+  - contextual welcome copy
+  - notification entry point
+  - user menu and sign out
+  - mobile/tablet sidebar trigger
+- `PageHeader` standardizes the two-region page header pattern:
+  - left: title and description
+  - right: actions
 
 ## Mock-To-Real Data Strategy
 
