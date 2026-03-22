@@ -80,7 +80,7 @@ export function DashboardOverview() {
                 <p className="text-sm text-muted">{stat.title}</p>
                 <p className="mt-2.5 text-[1.9rem] font-semibold text-slate-950 dark:text-white">
                   {stat.value}
-                </p>
+                </p>  
               </div>
               <span
                 className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${

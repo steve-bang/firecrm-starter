@@ -1,13 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useEffect, useEffectEvent, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { dashboardNavigation } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 
 const SIDEBAR_STORAGE_KEY = "firecrm-sidebar-collapsed";
+
+type DashboardSidebarProps = {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+};
 
 type IconProps = {
   className?: string;
@@ -124,6 +129,15 @@ function CollapseIcon({ className, collapsed }: IconProps & { collapsed: boolean
   );
 }
 
+function CloseIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path d="M7 7L17 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M17 7L7 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const sidebarIcons: Record<string, (props: IconProps) => React.JSX.Element> = {
   "/dashboard": OverviewIcon,
   "/dashboard/profile": ProfileIcon,
@@ -132,8 +146,14 @@ const sidebarIcons: Record<string, (props: IconProps) => React.JSX.Element> = {
   "/dashboard/staff": StaffIcon,
 };
 
-export function DashboardSidebar() {
+export function DashboardSidebar({
+  mobileOpen = false,
+  onMobileClose,
+}: DashboardSidebarProps) {
   const pathname = usePathname();
+  const handleMobileClose = useEffectEvent(() => {
+    onMobileClose?.();
+  });
   const [collapsed, setCollapsed] = useState(() => {
     if (typeof window === "undefined") {
       return false;
@@ -141,6 +161,10 @@ export function DashboardSidebar() {
 
     return window.localStorage.getItem(SIDEBAR_STORAGE_KEY) === "true";
   });
+
+  useEffect(() => {
+    handleMobileClose();
+  }, [pathname]);
 
   function toggleCollapsed() {
     setCollapsed((current) => {
@@ -151,83 +175,105 @@ export function DashboardSidebar() {
   }
 
   return (
-    <aside
-      className={cn(
-        "shell-sidebar hidden shrink-0 flex-col px-3 py-4 text-slate-900 xl:flex transition-[width] duration-300",
-        collapsed ? "w-24 items-center px-3" : "w-[290px]",
-      )}
-    >
-      <Link
-        href="/dashboard"
+    <>
+      <div
         className={cn(
-          "mb-6 flex w-full items-center transition",
-          collapsed ? "justify-center px-0" : "gap-3 px-2",
+          "fixed inset-0 z-30 bg-slate-950/30 backdrop-blur-sm transition xl:hidden",
+          mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
+        )}
+        aria-hidden="true"
+        onClick={onMobileClose}
+      />
+
+      <aside
+        className={cn(
+          "shell-sidebar fixed inset-y-0 left-0 z-40 flex h-screen flex-col px-3 py-4 text-slate-900 transition-[transform,width] duration-300 xl:sticky xl:top-0",
+          mobileOpen ? "translate-x-0" : "-translate-x-full xl:translate-x-0",
+          collapsed ? "w-24 items-center px-3" : "w-[290px]",
         )}
       >
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] bg-[var(--color-brand)] text-sm font-semibold text-white shadow-sm">
-          FC
-        </div>
-        {!collapsed ? (
-          <div className="min-w-0">
-            <p className="text-sm font-semibold tracking-tight text-slate-950">FireCRM</p>
-            <p className="text-xs text-subtle">Starter</p>
-          </div>
-        ) : null}
-      </Link>
-
-      <div className="w-full space-y-1">
-        {dashboardNavigation.map((item) => {
-          const active = pathname === item.href;
-          const Icon = sidebarIcons[item.href] ?? OverviewIcon;
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              title={collapsed ? item.label : undefined}
-              className={cn(
-                "group flex items-center rounded-[var(--radius-control)] transition-colors",
-                active
-                  ? "surface-card-muted text-slate-950"
-                  : "text-slate-600 hover:bg-white/70 hover:text-slate-950",
-                collapsed ? "justify-center px-0 py-3" : "gap-3 px-3 py-2.5",
-              )}
-            >
-              <div
-                className={cn(
-                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] transition",
-                  active
-                    ? "bg-[color:color-mix(in_srgb,var(--color-brand)_12%,white)] text-[var(--color-brand)]"
-                    : "text-slate-500 group-hover:text-slate-700",
-                )}
-              >
-                <Icon className="h-5 w-5" />
+        <div className="mb-6 flex w-full items-center justify-between">
+          <Link
+            href="/dashboard"
+            className={cn(
+              "flex items-center transition",
+              collapsed ? "justify-center px-0" : "gap-3 px-2",
+            )}
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] bg-[var(--color-brand)] text-sm font-semibold text-white shadow-sm">
+              FC
+            </div>
+            {!collapsed ? (
+              <div className="min-w-0">
+                <p className="text-sm font-semibold tracking-tight text-slate-950">FireCRM</p>
+                <p className="text-xs text-subtle">Starter</p>
               </div>
-              {!collapsed ? (
-                <p className="truncate text-sm font-medium">{item.label}</p>
-              ) : null}
-            </Link>
-          );
-        })}
-      </div>
+            ) : null}
+          </Link>
 
-      <div className="mt-auto w-full pt-4">
-        <button
-          type="button"
-          onClick={toggleCollapsed}
-          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className={cn(
-            "group flex items-center text-slate-500 transition hover:text-slate-900",
-            collapsed ? "w-auto justify-center px-0 py-2" : "w-full gap-3 px-3 py-2",
-          )}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          <CollapseIcon className="h-5 w-5 shrink-0" collapsed={collapsed} />
-          {!collapsed ? (
-            <span className="text-sm font-medium">Collapse</span>
-          ) : null}
-        </button>
-      </div>
-    </aside>
+          <button
+            type="button"
+            onClick={onMobileClose}
+            className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-control)] text-slate-500 transition hover:bg-white hover:text-slate-900 xl:hidden"
+            aria-label="Close sidebar"
+          >
+            <CloseIcon className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="min-h-0 w-full flex-1 overflow-y-auto">
+          <div className="w-full space-y-1">
+            {dashboardNavigation.map((item) => {
+              const active = pathname === item.href;
+              const Icon = sidebarIcons[item.href] ?? OverviewIcon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  title={collapsed ? item.label : undefined}
+                  className={cn(
+                    "group flex items-center rounded-[var(--radius-control)] transition-colors",
+                    active
+                      ? "surface-card-muted text-slate-950"
+                      : "text-slate-600 hover:bg-white/70 hover:text-slate-950",
+                    collapsed ? "justify-center px-0 py-3" : "gap-3 px-3 py-2.5",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] transition",
+                      active
+                        ? "bg-[color:color-mix(in_srgb,var(--color-brand)_12%,white)] text-[var(--color-brand)]"
+                        : "text-slate-500 group-hover:text-slate-700",
+                    )}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  {!collapsed ? <p className="truncate text-sm font-medium">{item.label}</p> : null}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="w-full shrink-0 pt-4">
+          {/* Keep the footer action outside the scrolling nav so it never disappears on shorter screens. */}
+          <button
+            type="button"
+            onClick={toggleCollapsed}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className={cn(
+              "group flex items-center text-slate-500 transition hover:text-slate-900",
+              collapsed ? "w-auto justify-center px-0 py-2" : "w-full gap-3 px-3 py-2",
+            )}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <CollapseIcon className="h-5 w-5 shrink-0" collapsed={collapsed} />
+            {!collapsed ? <span className="text-sm font-medium">Collapse</span> : null}
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
