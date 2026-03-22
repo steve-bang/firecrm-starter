@@ -46,6 +46,7 @@ export function ResetPasswordForm({ code }: { code: string }) {
         <Input
           label="New password"
           type="password"
+          placeholder="Enter your new password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required
@@ -53,6 +54,7 @@ export function ResetPasswordForm({ code }: { code: string }) {
         <Input
           label="Confirm password"
           type="password"
+          placeholder="Re-enter your new password"
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
           required

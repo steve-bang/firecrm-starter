@@ -39,6 +39,7 @@ export function ForgotPasswordForm() {
         <Input
           label="Email address"
           type="email"
+          placeholder="you@company.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required

@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
+
 import { requireSession } from "@/lib/auth";
 import { ProfileSettingsForm } from "@/modules/profile/components/profile-settings-form";
 import type { UserProfile } from "@/types/user";
+
+export const metadata: Metadata = {
+  title: "Profile",
+  description:
+    "Manage your account identity, avatar, and personal workspace details in FireCRM Starter.",
+};
 
 export default async function DashboardProfilePage() {
   const session = await requireSession();

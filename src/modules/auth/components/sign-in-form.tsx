@@ -44,6 +44,7 @@ export function SignInForm() {
         <Input
           label="Email address"
           type="email"
+          placeholder="you@company.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
@@ -51,6 +52,7 @@ export function SignInForm() {
         <Input
           label="Password"
           type="password"
+          placeholder="Enter your password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required

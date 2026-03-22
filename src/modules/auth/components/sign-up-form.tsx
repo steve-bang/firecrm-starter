@@ -48,6 +48,7 @@ export function SignUpForm() {
       <form className="space-y-4" onSubmit={handleSubmit}>
         <Input
           label="Full name"
+          placeholder="Steve Bang"
           value={name}
           onChange={(event) => setName(event.target.value)}
           required
@@ -55,6 +56,7 @@ export function SignUpForm() {
         <Input
           label="Work email"
           type="email"
+          placeholder="you@company.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
@@ -62,6 +64,7 @@ export function SignUpForm() {
         <Input
           label="Password"
           type="password"
+          placeholder="Create a secure password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           hint="Use at least 8 characters for production projects."
